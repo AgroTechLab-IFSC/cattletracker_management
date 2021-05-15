@@ -1,5 +1,6 @@
 // ignore: avoid_web_libraries_in_flutter
 import 'dart:html';
+// import 'dart:io' if (dart.library.html) 'dart:ui' as ui;
 import 'dart:ui' as ui;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,6 @@ import 'package:flutter_http_post_request/shared_service.dart';
 class HomePage extends StatefulWidget {
   @override
   _HomePageState createState() => _HomePageState();
-  
 }
 
 class _HomePageState extends State<HomePage> {
@@ -49,13 +49,14 @@ class _HomePageState extends State<HomePage> {
 
   Widget _uiSetup() {
 // ignore: undefined_prefixed_name
-  ui.platformViewRegistry.registerViewFactory(
-      'hello-html',
-      (int viewId) => IFrameElement()
-        ..width = '640'
-        ..height = '360'
-        ..src = 'https://demo.thingsboard.io/dashboard/6e9f7550-4c2f-11eb-85f1-89bdf3965cf4?publicId=cd275350-ab97-11eb-83ac-bf5e0e990b9e'
-        ..style.border = 'none');
+    ui.platformViewRegistry.registerViewFactory(
+        'hello-html',
+        (int viewId) => IFrameElement()
+          ..width = '640'
+          ..height = '360'
+          ..src =
+              'https://demo.thingsboard.io/dashboard/6e9f7550-4c2f-11eb-85f1-89bdf3965cf4?publicId=cd275350-ab97-11eb-83ac-bf5e0e990b9e'
+          ..style.border = 'none');
 
     return new Container(
       alignment: Alignment.center,
@@ -65,9 +66,8 @@ class _HomePageState extends State<HomePage> {
           widthFactor: 1,
           heightFactor: 1,
           child: HtmlElementView(viewType: 'hello-html'),
+        ),
       ),
-    ),
-  );
-                        }
-                      }
-                      
+    );
+  }
+}
