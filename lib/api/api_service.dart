@@ -9,13 +9,9 @@ class APIService {
     String url = "https://agrotechlab.lages.ifsc.edu.br:8080/api/auth/login";
 
     final response = await http.post(url, body: jsonEncode(requestModel));
-    if (response.statusCode == 200 || response.statusCode == 400) {
-      return LoginResponseModel.fromJson(
-        json.decode(response.body),
-      );
-    } else {
-      throw Exception('Failed to load data!');
-    }
+    return LoginResponseModel.fromJson(
+      json.decode(response.body),
+    );
   }
 
   Future<DataModel> getUsers() async {

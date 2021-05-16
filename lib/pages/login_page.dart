@@ -18,12 +18,12 @@ class _LoginPageState extends State<LoginPage> {
   LoginRequestModel loginRequestModel;
   //String token;
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final login = TextEditingController();
+  final senha = TextEditingController();
   @override
   void initState() {
     super.initState();
     loginRequestModel = new LoginRequestModel();
-    loginRequestModel.username = "cdonadel1@gmail.com";
-    loginRequestModel.password = "Assinc2814!";
   }
 
   @override
@@ -32,6 +32,61 @@ class _LoginPageState extends State<LoginPage> {
       child: _uiSetup(context),
       inAsyncCall: isApiCallProcess,
       opacity: 0.3,
+    );
+  }
+
+  textFormFieldLogin() {
+    return TextFormField(
+      controller: login,
+      keyboardType: TextInputType.emailAddress,
+      onSaved: (input) => loginRequestModel.username = input,
+      validator: (input) =>
+          !input.contains('@') ? "Email Id should be valid" : null,
+      decoration: new InputDecoration(
+        hintText: "Email Address",
+        enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(
+                color: Theme.of(context).accentColor.withOpacity(0.2))),
+        focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Theme.of(context).accentColor)),
+        prefixIcon: Icon(
+          Icons.email,
+          color: Theme.of(context).accentColor,
+        ),
+      ),
+    );
+  }
+
+  textFormFieldSenha() {
+    return new TextFormField(
+      controller: senha,
+      style: TextStyle(color: Theme.of(context).accentColor),
+      keyboardType: TextInputType.text,
+      onSaved: (input) => loginRequestModel.password = input,
+      validator: (input) =>
+          input.length < 3 ? "Password should be more than 3 characters" : null,
+      obscureText: hidePassword,
+      decoration: new InputDecoration(
+        hintText: "Password",
+        enabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(
+                color: Theme.of(context).accentColor.withOpacity(0.2))),
+        focusedBorder: UnderlineInputBorder(
+            borderSide: BorderSide(color: Theme.of(context).accentColor)),
+        prefixIcon: Icon(
+          Icons.lock,
+          color: Theme.of(context).accentColor,
+        ),
+        suffixIcon: IconButton(
+          onPressed: () {
+            setState(() {
+              hidePassword = !hidePassword;
+            });
+          },
+          color: Theme.of(context).accentColor.withOpacity(0.4),
+          icon: Icon(hidePassword ? Icons.visibility_off : Icons.visibility),
+        ),
+      ),
     );
   }
 
@@ -68,70 +123,9 @@ class _LoginPageState extends State<LoginPage> {
                           style: Theme.of(context).textTheme.headline2,
                         ),
                         SizedBox(height: 20),
-                        new TextFormField(
-                          keyboardType: TextInputType.emailAddress,
-                          initialValue: loginRequestModel.username,
-                          onSaved: (input) => loginRequestModel.username = input,
-                          validator: (input) => !input.contains('@')
-                              ? "Email Id should be valid"
-                              : null,
-                          decoration: new InputDecoration(
-                            hintText: "Email Address",                            
-                            enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: Theme.of(context)
-                                        .accentColor
-                                        .withOpacity(0.2))),
-                            focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: Theme.of(context).accentColor)),
-                            prefixIcon: Icon(
-                              Icons.email,
-                              color: Theme.of(context).accentColor,
-                            ),
-                          ),
-                        ),
+                        textFormFieldLogin(),
                         SizedBox(height: 20),
-                        new TextFormField(
-                          style:
-                              TextStyle(color: Theme.of(context).accentColor),
-                          keyboardType: TextInputType.text,
-                          initialValue: loginRequestModel.password,
-                          onSaved: (input) =>
-                              loginRequestModel.password = input,
-                          validator: (input) => input.length < 3
-                              ? "Password should be more than 3 characters"
-                              : null,
-                          obscureText: hidePassword,
-                          decoration: new InputDecoration(
-                            hintText: "Password",
-                            enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: Theme.of(context)
-                                        .accentColor
-                                        .withOpacity(0.2))),
-                            focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(
-                                    color: Theme.of(context).accentColor)),
-                            prefixIcon: Icon(
-                              Icons.lock,
-                              color: Theme.of(context).accentColor,
-                            ),
-                            suffixIcon: IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  hidePassword = !hidePassword;
-                                });
-                              },
-                              color: Theme.of(context)
-                                  .accentColor
-                                  .withOpacity(0.4),
-                              icon: Icon(hidePassword
-                                  ? Icons.visibility_off
-                                  : Icons.visibility),
-                            ),
-                          ),
-                        ),
+                        textFormFieldSenha(),
                         SizedBox(height: 30),
                         // ignore: deprecated_member_use
                         FlatButton(
@@ -145,29 +139,35 @@ class _LoginPageState extends State<LoginPage> {
 
                               APIService apiService = new APIService();
                               apiService.login(loginRequestModel).then((value) {
-                                print(value.toJson()['token']);
                                 if (value != null) {
                                   setState(() {
                                     isApiCallProcess = false;
                                   });
 
                                   if (value.token.isNotEmpty) {
-                                    final snackBar = SnackBar(
-                                        content: Text("Login Successful"));
-                                    scaffoldKey.currentState
-                                        // ignore: deprecated_member_use
-                                        .showSnackBar(snackBar);
-
-                                    SharedService.setLoginDetails(
-                                        value);
+                                    SharedService.setLoginDetails(value);
                                     Navigator.of(context)
                                         .pushReplacementNamed('/home');
                                   } else {
-                                    final snackBar =
-                                        SnackBar(content: Text(value.error));
-                                    scaffoldKey.currentState
-                                        // ignore: deprecated_member_use
-                                        .showSnackBar(snackBar);
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                            title: Text("Erro"),
+                                            content: Text(
+                                                "Login e/ou Senha inválido(s)"),
+                                            actions: <Widget>[
+                                              // ignore: deprecated_member_use
+                                              FlatButton(
+                                                  child: Text("OK"),
+                                                  onPressed: () {
+                                                    login.text = "";
+                                                    senha.text = "";
+                                                    Navigator.pop(context);
+                                                  })
+                                            ]);
+                                      },
+                                    );
                                   }
                                 }
                               });
@@ -194,11 +194,11 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   bool validateAndSave() {
-     final form = globalFormKey.currentState;
-     if (form.validate()) {
-       form.save();
-       return true;
-     }
-     return false;
+    final form = globalFormKey.currentState;
+    if (form.validate()) {
+      form.save();
+      return true;
+    }
+    return false;
   }
 }

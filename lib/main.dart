@@ -27,6 +27,11 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         fontFamily: 'Poppins',
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            primary: Colors.transparent,
+          ),
+        ),
         primaryColor: Colors.white,
         floatingActionButtonTheme: FloatingActionButtonThemeData(
           elevation: 0,

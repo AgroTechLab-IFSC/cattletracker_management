@@ -19,29 +19,24 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: Colors.redAccent,
           title: Text("Dashboard"),
           actions: <Widget>[
-            GestureDetector(
-              onTap: () {
-                SharedService.logout().then(
-                  (_) => Navigator.of(context).pushReplacementNamed('/login'),
-                );
-              },
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: <Widget>[
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(0, 0, 5.0, 0),
-                    child: Icon(Icons.power_settings_new),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.fromLTRB(0, 0, 5.0, 0),
+                  child: Icon(Icons.power_settings_new),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).pushReplacementNamed('/login');
+                  },
+                  child: Text(
+                    "Logout",
+                    style: TextStyle(fontSize: 20),
                   ),
-                  Padding(
-                    padding: EdgeInsets.fromLTRB(0, 0, 10.0, 0),
-                    child: Text(
-                      "Logout",
-                      style: TextStyle(fontSize: 18),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+                ),
+              ],
+            )
           ]),
       body: _uiSetup(),
     );
