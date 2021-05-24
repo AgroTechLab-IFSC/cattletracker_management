@@ -28,7 +28,20 @@
 .packages
 .pub-cache/
 .pub/
-/build/
+.txt
+/build/webview_flutter
+/build/shared_preferences
+/build/kotlin
+/build/flutter_assets
+/build/app/generated
+/build/app/intermediates
+/build/app/kotlin
+/build/app/reports
+/build/app/tmp
+/build/62f14693764db0ebbdcfdbb2f9f2aa8a
+/build/082f6d3293e05885095f7703bb6393cf
+/build/4436e1accf8ae04fae29a93e1fa2f65b
+
 
 # Web related
 lib/generated_plugin_registrant.dart
