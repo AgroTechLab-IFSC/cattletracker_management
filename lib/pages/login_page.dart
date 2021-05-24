@@ -36,6 +36,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   textFormFieldLogin() {
+    login.text = 'seu-email@gmail.com';
     return TextFormField(
       controller: login,
       keyboardType: TextInputType.emailAddress,
@@ -58,6 +59,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   textFormFieldSenha() {
+    senha.text = 'sua-senha';
     return new TextFormField(
       controller: senha,
       style: TextStyle(color: Theme.of(context).accentColor),
