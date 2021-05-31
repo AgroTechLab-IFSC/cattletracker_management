@@ -6,7 +6,6 @@ import '../../utils/dashboard.dart';
 
 class Web implements Dashboard {
   returnDashboard() {
-    // ignore: undefined_prefixed_name
     ui.platformViewRegistry.registerViewFactory(
         'hello-html',
         (int viewId) => IFrameElement()
